@@ -6,10 +6,12 @@ const session = require('express-session')
 const nunjucks = require('nunjucks')
 const dotenv = require('dotenv')
 const passport = require('passport')
+
 dotenv.config()
 const pageRouter = require('./routes/page')
 const authRouter = require('./routes/auth')
 const {sequelize} = require('./models')
+const passportConfig = require('./passport')
 
 const app = express()
 app.set('port', process.env.POTH || 8001)
@@ -25,6 +27,7 @@ sequelize.sync({force: false})
     .catch((err) => {
         console.error(err)
     })
+passportConfig()
 
 app.use(morgan('dev'))
 app.use(express.static(path.join(__dirname, 'public')))

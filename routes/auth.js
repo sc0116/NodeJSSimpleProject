@@ -1,6 +1,7 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
+const passport = require('passport')
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares')
 
 const router = express.Router()
@@ -47,6 +48,14 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
 router.get('/logout', isLoggedIn, (req, res) => {
     req.logout()
     req.session.destroy()
+    res.redirect('/')
+})
+
+router.get('/kakao', passport.authenticate('kakao'))
+
+router.get('/kakao/callback', passport.authenticate('kakao', {
+    failureRedirect: '/'
+}), (req, res) => {
     res.redirect('/')
 })
 
